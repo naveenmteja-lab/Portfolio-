@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Naveen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-header h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(15px);
+            z-index: 999;
+            padding: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #3498db;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .login-nav, .profile-nav {
+            padding: 0.6rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-nav {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .login-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .profile-nav {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .profile-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff20"><polygon points="0,100 1000,0 1000,100"/></svg>');
+            animation: wave 25s linear infinite;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            border: 5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: slideUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            animation: slideUp 1s ease 0.2s both;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.95);
+            color: #667eea;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            animation: slideUp 1s ease 0.4s both;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .dashboard-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 4px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .dashboard-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .upload-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8fcff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(52,152,219,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .upload-area:hover::before {
+            left: 100%;
+        }
+
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(52,152,219,0.2);
+        }
+
+        .upload-area.dragover {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-color: #2980b9;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #3498db;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .skill-item i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .skill-item h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Certificates Section */
+        .certificates-section {
+            grid-column: 1 / -1;
+        }
+
+        .certificates-section h3 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .certificate-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .certificate-preview {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .certificate-card:hover .certificate-preview img {
+            transform: scale(1.05);
+        }
+
+        .certificate-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(52,152,219,0.9), rgba(41,128,185,0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .certificate-card:hover .certificate-overlay {
+            opacity: 1;
+        }
+
+        .certificate-overlay i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .certificate-info {
+            padding: 1.8rem;
+        }
+
+        .certificate-info h4 {
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .certificate-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(231,76,60,0.4);
+        }
+
+        .no-certificates {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .no-certificates i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1); }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <div class="login-header">
+                <h2><i class="fas fa-user-shield"></i> Dashboard Access</h2>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Enter Dashboard
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem; color: #7f8c8d; font-size: 0.9rem;">
+                Demo: <strong>admin</strong> / <strong>password123</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">Naveen</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#dashboard" onclick="scrollToDashboard()">Dashboard</a></li>
+                <li><a href="#skills">Skills</a></li>
+            </ul>
+            <div id="authBtn" class="login-nav" onclick="toggleLogin()">
+                <i class="fas fa-sign-in-alt"></i> Dashboard
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-img">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1>Naveen</h1>
+            <p>AI/ML Engineer | Full Stack Developer | Data Scientist</p>
+            <a href="#dashboard" class="cta-btn" onclick="scrollToDashboard()">
+                <i class="fas fa-rocket"></i> Access Dashboard
+            </a>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <img src="naveen.jpeg" alt="Profile">
+            <h1>Naveen</h1>
+            <p>AI/ML Engineer & Full Stack Developer</p>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="dashboard-grid">
+                <!-- Upload Section -->
+                <div class="upload-section">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Upload Certificate</h3>
+                    <div class="upload-area" id="uploadArea">
+                        <span class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </span>
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
+                            <strong>Click or drag & drop</strong>
+                        </p>
+                        <p>Your certificates (images & PDFs)</p>
+                        <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="skills-section">
+                    <h3><i class="fas fa-star"></i> My Skills</h3>
+                    <div class="skills-grid" id="skillsGrid">
+                        <div class="skill-item">
+                            <i class="fab fa-html5" style="color: #e34f26;"></i>
+                            <h4>HTML5/CSS3</h4>
+                            <p>Advanced</p>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-js-square" style="color: #f7df1e;"></i>
+                            <h4>JavaScript</h4>
+                            <p>Advanced</p>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-react" style="color: #61dafb;"></i>
+                            <h4>React.js</h4>
+                            <p>Intermediate</p>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-node-js" style="color: #43853d;"></i>
+                            <h4>Node.js</h4>
+                            <p>Intermediate</p>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-brain" style="color: #9b59b6;"></i>
+                            <h4>AI/ML</h4>
+                            <p>Intermediate</p>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-chart-line" style="color: #3498db;"></i>
+                            <h4>Python</h4>
+                            <p>Advanced</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates Section -->
+                <div class="certificates-section skills-section">
+                    <h3><i class="fas fa-certificate"></i> My Certificates</h3>
+                    <div class="certificates-grid" id="certificatesGrid">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        const loginForm = document.getElementById('loginForm');
+        const authBtn = document.getElementById('authBtn');
+        const dashboard = document.getElementById('dashboard');
+        let isLoggedIn = false;
+        let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
+
+        // Demo credentials
+        const validCredentials = { username: 'admin', password: 'password123' };
+
+        // Login functionality
+        function toggleLogin() {
+            if (!isLoggedIn) {
+                loginModal.style.display = 'block';
+            }
+        }
+
+        closeModal.onclick = () => loginModal.style.display = 'none';
+        window.onclick = (event) => {
+            if (event.target == loginModal) {
+                loginModal.style.display = 'none';
+            }
+        };
+
+        loginForm.onsubmit = (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === validCredentials.username && password === validCredentials.password) {
+                isLoggedIn = true;
+                authBtn.innerHTML = '<i class="fas fa-user"></i> Profile';
+                authBtn.className = 'profile-nav';
+                authBtn.onclick = logout;
+                loginModal.style.display = 'none';
+                dashboard.style.display = 'block';
+                dashboard.scrollIntoView({ behavior: 'smooth' });
+                loadCertificates();
+            } else {
+                alert('❌ Invalid credentials!\n\nUsername: admin\nPassword: password123');
+                document.getElementById('username').focus();
+            }
+        };
+
+        function logout() {
+            isLoggedIn = false;
+            authBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Dashboard';
+            authBtn.className = 'login-nav';
+            authBtn.onclick = toggleLogin;
+            dashboard.style.display = 'none';
+        }
+
+        // File upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        // Drag & drop events
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+        });
+
+        uploadArea.onclick = () => fileInput.click();
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        uploadArea.addEventListener('drop', handleDrop);
+
+        function handleDrop(e) {
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(uploadFile);
+        }
+
+        function uploadFile(file) {
+            if (!file.type.match('image.*') && file.type !== 'application/pdf') {
+                alert('Please upload images or PDFs only!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const certificate = {
+                    id: Date.now() + Math.random(),
+                    name: file.name.length > 25 ? file.name.substring(0, 22) + '...' : file.name,
+                    preview: e.target.result,
+                    date: new Date().toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    }),
+                    size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
+                    fileType: file.type
+                };
+
+                certificates.unshift(certificate);
+                localStorage.setItem('certificates', JSON.stringify(certificates));
+                loadCertificates();
+
+                // Success animation
+                const originalHTML = uploadArea.innerHTML;
+                uploadArea.innerHTML = `
+                    <span class="upload-icon">
+                        <i class="fas fa-check-circle" style="color: #27ae60; font-size: 4rem;"></i>
+                    </span>
+                    <p style="font-size: 1.1rem; color: #27ae60;">
+                        <strong>✅ ${file.name} uploaded!</strong>
+                    </p>
+                `;
+                uploadArea.style.background = '#e8f5e8';
+                uploadArea.style.borderColor = '#27ae60';
+
+                setTimeout(() => {
+                    uploadArea.innerHTML = originalHTML;
+                    uploadArea.style.background = '#f8fcff';
+                    uploadArea.style.borderColor = '#3498db';
+                    uploadArea.querySelector('input').value = '';
+                }, 2500);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadCertificates() {
+            const certificatesGrid = document.getElementById('certificatesGrid');
+            
+            if (certificates.length === 0) {
+                certificatesGrid.innerHTML = `
+                    <div class="no-certificates">
+                        <i class="fas fa-certificate"></i>
+                        <h3>No certificates yet</h3>
+                        <p>Upload your first certificate using the upload area above</p>
+                    </div>
+                `;
+                return;
+            }
+
+            certificatesGrid.innerHTML = certificates.map(cert => `
+                <div class="certificate-card">
+                    <div class="certificate-preview">
+                        <img src="${cert.preview}" alt="${cert.name}" onerror="this.src='https://via.placeholder.com/320x220/3498db/ffffff?text=No+Preview'">
+                        <div class="certificate-overlay">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-info">
+                        <h4>${cert.name}</h4>
+                        <div class="certificate-meta">
+                            <span><i class="fas fa-calendar"></i> ${cert.date}</span>
+                            <span><i class="fas fa-hdd"></i> ${cert.size}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteCertificate('${cert.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteCertificate(id) {
+            if (confirm('Delete this certificate?')) {
+                certificates = certificates.filter(cert => cert.id !== id);
+                localStorage.setItem('certificates', JSON.stringify(certificates));
+                loadCertificates();
+            }
+        }
+
+        function scrollToDashboard() {
+            if (isLoggedIn) {
+                dashboard.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                toggleLogin();
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255,255,255,0.98)';
+                navbar.style.boxShadow = '0 5px 25px rgba(0,0,0,0.15)';
+            } else {
+                navbar.style.background = 'rgba(255,255,255,0.95)';
+                navbar.style.boxShadow = '0 2px 15px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // Load certificates on dashboard show
+        const observer = new MutationObserver(() => {
+            if (dashboard.style.display === 'block' && certificates.length > 0) {
+                loadCertificates();
+            }
+        });
+        observer.observe(dashboard, { attributes: true, attributeFilter: ['style'] });
+
+        // Initial load
+        if (isLoggedIn) loadCertificates();
+    </script>
+</body>
+</html>
